@@ -36,10 +36,6 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
-/* Cards waiting to slide in sit up to 90px off to the side. Phone browsers ignore overflow-x on
-   body and widen (zoom out) the page to fit them, so clip on the content wrappers too. `clip`
-   doesn't create a scroll container; `hidden` is the fallback for browsers without it. */
-main, .footer { overflow-x: hidden; overflow-x: clip; }
 img, video, iframe { max-width: 100%; display: block; }
 [hidden] { display: none !important; }
 a { color: var(--purple-soft); text-decoration-thickness: 1px; text-underline-offset: 3px; }
@@ -360,12 +356,22 @@ p { margin: 0; }
 
 /* Scroll reveal: content is always visible; JS only offsets things below the fold and
    slides them into place (staggered by --i) as they enter. No opacity involved. */
-.reveal.is-below { transform: translate3d(var(--rx, 0px), var(--ry, 56px), 0) scale(var(--rs, .96)); }
+/* 2D translate on purpose: translate3d would give each of the ~47 waiting elements its own GPU
+   layer, which phones with tight graphics memory handle badly. */
+.reveal.is-below { transform: translate(var(--rx, 0px), var(--ry, 56px)) scale(var(--rs, .96)); }
 .reveal.is-entering { transition: transform 1s cubic-bezier(.2,.7,.1,1) calc(var(--i, 0) * 90ms); }
 .game:nth-child(odd) { --rx: -90px; --ry: 24px; }
 .game:nth-child(even) { --rx: 90px; --ry: 24px; }
 .tools__chips li { --ry: 20px; --rs: .8; }
 .contact__item { --rx: 60px; --ry: 0px; --rs: 1; }
+/* Only slide in from the side when there's margin to slide in from. Otherwise the waiting cards
+   poke past the screen edge, and phones zoom the whole page out to fit them (they ignore
+   overflow-x on body). Don't clip `main` to hide it instead: on phones that forces the page into
+   one texture too tall for the GPU, and whole sections stop drawing. */
+@media (max-width: 1240px) {
+  .game:nth-child(odd), .game:nth-child(even) { --rx: 0px; --ry: 48px; }
+  .contact__item { --rx: 0px; --ry: 32px; }
+}
 
 /* Showcase tab switch: the new panel's cards pop in. */
 .showcase.is-switching .work { animation: rise-in .6s cubic-bezier(.2,.7,.1,1) both; animation-delay: calc(var(--i, 0) * 70ms); }
