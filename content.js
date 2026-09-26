@@ -12,9 +12,9 @@
 */
 window.SITE = {
   name: "JCLDEV",
-  title: "Computer Engineer · Game Designer",
+  title: "Computer Engineer · UI/UX Designer · Game Designer",
   bio: "Programming for 10+ years, fullstack.",
-  photo: "", // e.g. "assets/photo.jpg"
+  photo: "assets/photo.jpg", // e.g. "assets/photo.jpg"
 
   highlights: [
     { value: "10+", label: "Years programming" },
