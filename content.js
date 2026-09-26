@@ -12,7 +12,7 @@
 */
 window.SITE = {
   name: "JCLDEV",
-  title: "Senior Computer Engineer · Game Designer",
+  title: "Computer Engineer · Game Designer",
   bio: "Programming for 10+ years, fullstack.",
   photo: "", // e.g. "assets/photo.jpg"
 
