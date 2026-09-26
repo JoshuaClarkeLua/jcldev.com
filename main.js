@@ -111,18 +111,31 @@
   }).join("");
 
   // ----- Games -----
+  // Details fetched from Roblox (games-data.js, refreshed by a GitHub Action) fill in anything
+  // left empty in content.js. Values typed in content.js always win.
+  var GAME_DATA = window.GAME_DATA || {};
+  function compact(n) {
+    return new Intl.NumberFormat("en-US", { notation: "compact", maximumFractionDigits: 1 }).format(n) + "+";
+  }
   $("games-list").innerHTML = (S.games || []).map(function (g) {
-    var title = g.name || "Game title";
-    var media = mediaHTML(g.video, g.thumbnail, title) || placeholder(ICONS.video, "Game video");
+    var place = (g.link || "").match(/roblox\.com\/games\/(\d+)/);
+    var d = (place && GAME_DATA[place[1]]) || {};
+    var name = g.name || d.name;
+    var title = name || "Game title";
+    // Studio shown in the period slot when there is no period, unless it just repeats the game's name.
+    var byline = g.period ? esc(g.period)
+      : d.creator && d.creator !== name ? "by " + esc(d.creator) : "";
+    var media = mediaHTML(g.video, g.thumbnail || d.thumbnail, title) || placeholder(ICONS.video, "Game video");
     var stats = (g.stats || []).map(function (st) {
-      return "<div><dt>" + esc(st.label) + "</dt><dd>" + (st.value ? esc(st.value) : "–") + "</dd></div>";
+      var value = st.value || (/^visits$/i.test(st.label) && d.visits ? compact(d.visits) : "");
+      return "<div><dt>" + esc(st.label) + "</dt><dd>" + (value ? esc(value) : "–") + "</dd></div>";
     }).join("");
     return '<article class="game reveal">' +
       '<div class="game__media">' + media + "</div>" +
       '<div class="game__body">' +
-        '<div class="game__head"><h3>' + text(g.name, "Game title") + '</h3><span class="game__period">' + (g.period ? esc(g.period) : "") + "</span></div>" +
+        '<div class="game__head"><h3>' + text(name, "Game title") + '</h3><span class="game__period">' + byline + "</span></div>" +
         '<p class="game__role">' + text(g.role, "Your role") + "</p>" +
-        '<p class="game__desc">' + text(g.description, "What you built for this game.") + "</p>" +
+        '<p class="game__desc">' + text(g.description || d.description, "What you built for this game.") + "</p>" +
         (stats ? '<dl class="game__stats">' + stats + "</dl>" : "") +
         (g.link ? link(g.link, "Play on Roblox " + ICONS.arrow, "game__play") : "") +
       "</div></article>";

@@ -28,47 +28,41 @@ window.SITE = {
   ],
 
   workedWith: [
-    { name: "Tencell Studios", logo: "", link: "" }
+    { name: "Tencell Studios", logo: "", link: "https://tencellstudios.com/" },
+    { name: "Splitbrick Studio", logo: "", link: "https://www.splitbrickstudio.com/" }
   ],
 
   // One entry per game. Copy a block to add more; delete a block to remove one.
   games: [
     {
-      name: "",
-      link: "",          // Roblox game link
-      thumbnail: "",     // image shown before the video plays
-      role: "",
-      period: "",        // e.g. "2023 – Present"
-      description: "",
+      link: "https://www.roblox.com/games/6403373529/Slap-Battles",          // Roblox game link
+      role: "Producer, Lead Programmer, Game Design",
       stats: [
-        { label: "Visits", value: "" },
-        { label: "Peak players", value: "" }
+        { label: "Peak players", value: "150,000+" }
       ],
       video: ""
     },
     {
-      name: "",
-      link: "",
-      thumbnail: "",
-      role: "",
-      period: "",
-      description: "",
-      stats: [
-        { label: "Visits", value: "" },
-        { label: "Peak players", value: "" }
+      link: "https://www.roblox.com/games/18799085098/Hide-or-OOF",
+      role: "Programmer",
+      stats: [,
+        { label: "Peak players", value: "60,000+" }
       ],
       video: ""
     },
     {
-      name: "",
-      link: "",
-      thumbnail: "",
-      role: "",
-      period: "",
-      description: "",
+      link: "https://www.roblox.com/games/13278651209/Pet-Store-Tycoon-2",
+      role: "Lead Programmer",
       stats: [
-        { label: "Visits", value: "" },
-        { label: "Peak players", value: "" }
+        { label: "Peak players", value: "2,000+" }
+      ],
+      video: ""
+    },
+    {
+      link: "https://www.roblox.com/games/12981384028/Sword-Swing-Simulator",
+      role: "Lead Programmer",
+      stats: [
+        { label: "Peak players", value: "8,000+" }
       ],
       video: ""
     }

@@ -1,0 +1,54 @@
+# Refreshes games-data.js and the game thumbnails from the Roblox API.
+# Runs daily, whenever content.js changes, and on demand from the Actions tab.
+name: Update game data
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  push:
+    branches: [main]
+    paths: [content.js, scripts/fetch-games.mjs]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: update-games
+  cancel-in-progress: true
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch game data from Roblox
+        run: node scripts/fetch-games.mjs
+
+      - name: Commit changes
+        id: commit
+        run: |
+          git add games-data.js assets/games
+          if git diff --cached --quiet; then
+            echo "No changes."
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git commit -m "Update game data from Roblox"
+            git push
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Pushes made by this workflow don't always trigger a Pages rebuild, so ask for one.
+      - name: Rebuild the site
+        if: steps.commit.outputs.changed == 'true'
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds"
+        env:
+          GH_TOKEN: ${{ github.token }}
