@@ -66,19 +66,42 @@
   });
   if (S.name) document.title = S.name;
   $("year").textContent = new Date().getFullYear();
+  var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // Split the hero name into letters so they can drop in one by one.
+  var heroName = $("hero-name");
+  heroName.setAttribute("aria-label", heroName.textContent);
+  heroName.innerHTML = Array.prototype.map.call(heroName.textContent, function (ch, i) {
+    return '<span class="ch" aria-hidden="true" style="--i:' + i + '">' + esc(ch) + "</span>";
+  }).join("");
 
   // ----- Hero -----
-  $("highlights").innerHTML = (S.highlights || []).map(function (h) {
-    return "<div><dt>" + esc(h.value) + "</dt><dd>" + esc(h.label) + "</dd></div>";
+  $("highlights").innerHTML = (S.highlights || []).map(function (h, i) {
+    return '<div style="--i:' + i + '"><dt>' + esc(h.value) + "</dt><dd>" + esc(h.label) + "</dd></div>";
   }).join("");
+  // Count up highlight values that start with a number ("10+" counts 0 → 10, then shows "+").
+  if (!reduceMotion) {
+    document.querySelectorAll("#highlights dt").forEach(function (dt) {
+      var m = dt.textContent.match(/^(\d+)(.*)$/);
+      if (!m) return;
+      var end = +m[1], rest = m[2], start = null, delay = 900, dur = 1400;
+      dt.textContent = "0" + rest;
+      requestAnimationFrame(function step(t) {
+        if (start === null) start = t + delay;
+        var k = Math.min(1, Math.max(0, (t - start) / dur));
+        dt.textContent = Math.round(end * (1 - Math.pow(1 - k, 3))) + rest;
+        if (k < 1) requestAnimationFrame(step);
+      });
+    });
+  }
   $("photo").innerHTML = S.photo
     ? '<img src="' + esc(S.photo) + '" alt="Photo of ' + esc(S.name) + '">'
     : placeholder(ICONS.user, "Your photo");
 
   // ----- Worked with -----
-  $("worked").innerHTML = (S.workedWith || []).map(function (w) {
+  $("worked").innerHTML = (S.workedWith || []).map(function (w, i) {
     var inner = w.logo ? '<img src="' + esc(w.logo) + '" alt="' + esc(w.name) + '">' : esc(w.name);
-    return "<li>" + (w.link ? link(w.link, inner) : "<span>" + inner + "</span>") + "</li>";
+    return '<li style="--i:' + i + '">' + (w.link ? link(w.link, inner) : "<span>" + inner + "</span>") + "</li>";
   }).join("");
 
   // ----- Skills -----
@@ -111,10 +134,10 @@
     return '<button class="tab" role="tab" id="tab-' + i + '" aria-controls="panel-' + i + '" aria-selected="' + (i === 0) + '" tabindex="' + (i === 0 ? 0 : -1) + '">' + esc(g.tab) + "</button>";
   }).join("");
   $("showcase-panels").innerHTML = groups.map(function (g, i) {
-    var items = (g.items || []).map(function (it) {
+    var items = (g.items || []).map(function (it, k) {
       var label = it.title || g.tab + " sample";
       var media = mediaHTML(it.video, it.image, label) || placeholder(ICONS.video, g.tab + " video or image");
-      return '<article class="work"><div class="work__media">' + media + "</div>" +
+      return '<article class="work" style="--i:' + k + '"><div class="work__media">' + media + "</div>" +
         (it.title ? "<h3>" + esc(it.title) + "</h3>" : "") +
         (it.caption ? "<p>" + esc(it.caption) + "</p>" : "") + "</article>";
     }).join("");
@@ -127,6 +150,10 @@
       t.tabIndex = i === j ? 0 : -1;
       $("panel-" + j).hidden = i !== j;
     });
+    var panel = $("panel-" + i);
+    panel.classList.remove("is-switching");
+    void panel.offsetWidth; // restart the pop-in animation
+    panel.classList.add("is-switching");
     tabs[i].focus();
   }
   tabs.forEach(function (t, i) {
@@ -196,16 +223,61 @@
     }, { rootMargin: "-45% 0px -50% 0px" });
     document.querySelectorAll("main section[id]").forEach(function (s) { spy.observe(s); });
 
-    // Small lift for cards entering from below the fold. They stay visible the whole time.
-    if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    // Things below the fold start offset and slide into place as they enter, staggered
+    // with their siblings. Only transforms move; they stay visible the whole time.
+    if (!reduceMotion) {
+      var finish = function (el) { el.classList.remove("is-entering"); };
       var lift = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
-          if (en.isIntersecting) { en.target.classList.remove("is-below"); lift.unobserve(en.target); }
+          if (!en.isIntersecting) return;
+          var el = en.target;
+          lift.unobserve(el);
+          el.classList.add("is-entering");
+          el.classList.remove("is-below");
+          el.addEventListener("transitionend", function end(e) {
+            if (e.target === el) { finish(el); el.removeEventListener("transitionend", end); }
+          });
+          setTimeout(function () { finish(el); }, 2000); // in case transitionend never fires
         });
-      }, { threshold: 0.1 });
-      document.querySelectorAll(".reveal").forEach(function (el) {
-        if (el.getBoundingClientRect().top > window.innerHeight) { el.classList.add("is-below"); lift.observe(el); }
+      }, { threshold: 0.05, rootMargin: "0px 0px -6% 0px" });
+      var REVEAL = ".section .eyebrow, .section h2, .skill, .game, .work, .tools__group h3, .tools__chips li, .contact__commissions, .contact__item";
+      document.querySelectorAll(REVEAL).forEach(function (el) {
+        el.classList.add("reveal");
+        var sibs = Array.prototype.filter.call(el.parentElement.children, function (s) { return s.matches(REVEAL); });
+        if (!el.style.getPropertyValue("--i")) el.style.setProperty("--i", Math.min(sibs.indexOf(el), 8));
+        var r = el.getBoundingClientRect();
+        if (r.height && r.top > window.innerHeight) { el.classList.add("is-below"); lift.observe(el); }
+      });
+
+      // Anything already on screen at load pops in instead, in reading order.
+      var onScreen = 0;
+      document.querySelectorAll(".reveal:not(.is-below)").forEach(function (el) {
+        var r = el.getBoundingClientRect();
+        if (!r.height || r.bottom < 0 || r.top > window.innerHeight) return;
+        el.classList.add("pop");
+        el.style.setProperty("--i", Math.min(onScreen++, 10));
       });
     }
   }
+
+  // ----- Scroll progress + hero parallax -----
+  var hero = document.querySelector(".hero");
+  var root = document.documentElement;
+  var queued = false;
+  function onScroll() {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(function () {
+      queued = false;
+      var max = root.scrollHeight - window.innerHeight;
+      root.style.setProperty("--progress", max > 0 ? (window.scrollY / max).toFixed(4) : "0");
+      if (!reduceMotion) {
+        var p = Math.min(1, Math.max(0, window.scrollY / hero.offsetHeight));
+        hero.style.setProperty("--p", p.toFixed(4));
+      }
+    });
+  }
+  window.addEventListener("scroll", onScroll, { passive: true });
+  window.addEventListener("resize", onScroll);
+  onScroll();
 })();
