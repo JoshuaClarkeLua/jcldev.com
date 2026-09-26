@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>JCLDEV</title>
+  <meta name="description" content="JCLDEV: senior computer engineer and game designer building Roblox experiences.">
+  <meta property="og:title" content="JCLDEV">
+  <meta property="og:description" content="Senior computer engineer and game designer building Roblox experiences.">
+  <meta name="theme-color" content="#0d0b11">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=Manrope:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+
+  <header class="nav" id="top">
+    <div class="nav__inner">
+      <a class="nav__brand" href="#top" data-bind="name">JCLDEV</a>
+      <nav class="nav__links" aria-label="Sections">
+        <a href="#skills">Skills</a>
+        <a href="#games">Games</a>
+        <a href="#showcase">Work</a>
+        <a href="#tools">Tools</a>
+        <a class="nav__cta" href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <!-- Hero: split black and white like the suit -->
+    <section class="hero" aria-labelledby="hero-name">
+      <div class="hero__split" aria-hidden="true"><span class="hero__white"></span><span class="hero__black"></span></div>
+      <div class="hero__inner">
+        <div class="hero__text">
+          <div class="hero__blend">
+            <p class="eyebrow">-- portfolio</p>
+            <h1 class="hero__name" id="hero-name" data-bind="name">JCLDEV</h1>
+            <p class="hero__title" data-bind="title"></p>
+            <p class="hero__bio" data-bind="bio"></p>
+            <dl class="hero__stats" id="highlights"></dl>
+          </div>
+          <div class="hero__actions">
+            <a class="btn btn--gold" href="#contact">Contact me</a>
+            <a class="btn btn--purple" href="#games">See my work</a>
+          </div>
+        </div>
+        <figure class="hero__photo" id="photo"></figure>
+      </div>
+    </section>
+
+    <section class="band band--worked" aria-label="Worked with">
+      <div class="wrap worked">
+        <p class="eyebrow">Worked with</p>
+        <ul class="worked__list" id="worked"></ul>
+      </div>
+    </section>
+
+    <section class="section" id="skills" aria-labelledby="skills-h">
+      <div class="wrap">
+        <p class="eyebrow">-- skills</p>
+        <h2 id="skills-h">What I do</h2>
+        <div class="skills" id="skills-list"></div>
+      </div>
+    </section>
+
+    <section class="section" id="games" aria-labelledby="games-h">
+      <div class="wrap">
+        <p class="eyebrow">-- games</p>
+        <h2 id="games-h">Games I've worked on</h2>
+        <div class="games" id="games-list"></div>
+      </div>
+    </section>
+
+    <section class="section" id="showcase" aria-labelledby="showcase-h">
+      <div class="wrap">
+        <p class="eyebrow">-- showcase</p>
+        <h2 id="showcase-h">Work samples</h2>
+        <div class="tabs" role="tablist" aria-label="Work type" id="showcase-tabs"></div>
+        <div id="showcase-panels"></div>
+      </div>
+    </section>
+
+    <section class="section section--white" id="tools" aria-labelledby="tools-h">
+      <div class="wrap">
+        <p class="eyebrow eyebrow--purple">-- tools</p>
+        <h2 id="tools-h">Tools I use</h2>
+        <div class="tools" id="tools-list"></div>
+      </div>
+    </section>
+
+    <section class="section" id="contact" aria-labelledby="contact-h">
+      <div class="wrap contact">
+        <div class="contact__intro">
+          <p class="eyebrow eyebrow--gold">-- contact</p>
+          <h2 id="contact-h">Let's work together</h2>
+          <p class="contact__commissions"><span class="label">Commissions</span> <span data-bind="commissions"></span></p>
+        </div>
+        <ul class="contact__list" id="contact-list"></ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap footer__inner">
+      <span>© <span id="year"></span> <span data-bind="name">JCLDEV</span></span>
+      <a href="#top">Back to top</a>
+    </div>
+  </footer>
+
+  <script src="content.js"></script>
+  <script src="main.js"></script>
+</body>
+</html>
