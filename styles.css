@@ -36,6 +36,10 @@ body {
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
+/* Cards waiting to slide in sit up to 90px off to the side. Phone browsers ignore overflow-x on
+   body and widen (zoom out) the page to fit them, so clip on the content wrappers too. `clip`
+   doesn't create a scroll container; `hidden` is the fallback for browsers without it. */
+main, .footer { overflow-x: hidden; overflow-x: clip; }
 img, video, iframe { max-width: 100%; display: block; }
 [hidden] { display: none !important; }
 a { color: var(--purple-soft); text-decoration-thickness: 1px; text-underline-offset: 3px; }
