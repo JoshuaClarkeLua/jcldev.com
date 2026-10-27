@@ -5,24 +5,24 @@ window.GAME_DATA = {
     "name": "Slap Battles",
     "description": "A game about slapping people into oblivion using different gloves with unique abilities.",
     "creator": "Slap Battles",
-    "visits": 3676638105,
-    "favorites": 4688118,
+    "visits": 3677761383,
+    "favorites": 4688852,
     "thumbnail": "assets/games/6403373529.webp"
   },
   "18799085098": {
     "name": "Hide or OOF!",
     "description": "Hide or OOF is a combination of hide and seek and prop hunt! The game was previously called Hide or Die.",
     "creator": "0 CCU Games",
-    "visits": 814408924,
-    "favorites": 9685408,
+    "visits": 814697132,
+    "favorites": 9685831,
     "thumbnail": "assets/games/18799085098.webp"
   },
   "13278651209": {
     "name": "Pet Store Tycoon 2",
     "description": "Build your dream pet store, adopt and raise pets, combine pets to make them more valuable, manage your own employees, and roleplay with friends!",
     "creator": "Splitbrick Studio",
-    "visits": 8132528,
-    "favorites": 36983,
+    "visits": 8133375,
+    "favorites": 36990,
     "thumbnail": "assets/games/13278651209.webp"
   },
   "12981384028": {
