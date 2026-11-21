@@ -5,23 +5,23 @@ window.GAME_DATA = {
     "name": "Slap Battles",
     "description": "A game about slapping people into oblivion using different gloves with unique abilities.",
     "creator": "Slap Battles",
-    "visits": 3695749766,
-    "favorites": 4702707,
+    "visits": 3696657304,
+    "favorites": 4703549,
     "thumbnail": "assets/games/6403373529.webp"
   },
   "18799085098": {
     "name": "Hide or OOF!",
     "description": "Hide or OOF is a combination of hide and seek and prop hunt! The game was previously called Hide or Die.",
     "creator": "0 CCU Games",
-    "visits": 821011991,
-    "favorites": 9693682,
+    "visits": 821246467,
+    "favorites": 9693895,
     "thumbnail": "assets/games/18799085098.webp"
   },
   "13278651209": {
     "name": "Pet Store Tycoon 2",
     "description": "Build your dream pet store, adopt and raise pets, combine pets to make them more valuable, manage your own employees, and roleplay with friends!",
     "creator": "Splitbrick Studio",
-    "visits": 8145840,
+    "visits": 8146211,
     "favorites": 36997,
     "thumbnail": "assets/games/13278651209.webp"
   },
@@ -29,7 +29,7 @@ window.GAME_DATA = {
     "name": "Sword Swing Simulator",
     "description": "Kill dummies with swords! Explore new zones! Collect wins to buy new stuff! Open eggs to get rare pets! Buy new swords to do more damage! Fight for wins in our PvP Zone!",
     "creator": "Sword Swing Simulator",
-    "visits": 11324231,
+    "visits": 11324234,
     "favorites": 393643,
     "thumbnail": "assets/games/12981384028.webp"
   }
